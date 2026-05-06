@@ -1,0 +1,55 @@
+{% from "components/section_card.html" import render_section %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Risk Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif']
+                    },
+                    boxShadow: {
+                        glass: '0 24px 80px rgba(3, 7, 18, 0.38)'
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body class="min-h-screen text-slate-100 antialiased">
+    <main class="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+        {% include "components/header.html" %}
+        {% include "components/error_banner.html" %}
+
+        <form
+            id="risk-form"
+            action="{{ url_for('dashboard.predict') }}"
+            data-api-url="{{ url_for('dashboard.predict_api') }}"
+            method="post"
+            class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]"
+        >
+            <section class="flex flex-col gap-4">
+                {% for section in sections %}
+                    {{ render_section(section, form_values, loop.first) }}
+                {% endfor %}
+            </section>
+
+            {% include "components/insight_panel.html" %}
+        </form>
+    </main>
+
+    <script id="initial-result" type="application/json">{{ result|tojson }}</script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

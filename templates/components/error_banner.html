@@ -1,0 +1,6 @@
+{% if error %}
+    <section class="rounded-2xl border border-rose-400/30 bg-rose-500/10 p-4 text-sm text-rose-100">
+        <p class="font-semibold text-rose-200">Unable to complete prediction</p>
+        <p class="mt-1 text-rose-100/90">{{ error }}</p>
+    </section>
+{% endif %}

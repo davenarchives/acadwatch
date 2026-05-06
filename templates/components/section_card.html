@@ -1,0 +1,26 @@
+{% from "components/field_card.html" import render_field %}
+
+{% macro render_section(section, form_values, is_open=False) %}
+    <details class="glass-panel group rounded-2xl transition duration-200 hover:border-sky-300/25" {% if is_open %}open{% endif %}>
+        <summary class="flex cursor-pointer items-center justify-between gap-4 p-5">
+            <div class="flex items-center gap-4">
+                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-500/12 text-violet-200 ring-1 ring-violet-300/15">
+                    <i data-lucide="{{ section.icon }}" class="h-5 w-5"></i>
+                </span>
+                <div>
+                    <h2 class="text-base font-semibold text-white">{{ section.title }}</h2>
+                    <p class="mt-1 text-sm leading-5 text-slate-400">{{ section.description }}</p>
+                </div>
+            </div>
+            <i data-lucide="chevron-down" class="h-5 w-5 shrink-0 text-slate-400 transition group-open:rotate-180"></i>
+        </summary>
+
+        <div class="grid gap-4 border-t border-white/10 p-5 md:grid-cols-2">
+            {% for field in section.fields %}
+                {% set current_value = form_values.get(field.name, field.default|string) %}
+                {% set field_id = "feature_" ~ loop.index ~ "_" ~ section.title|replace(" ", "_") %}
+                {{ render_field(field, current_value, field_id) }}
+            {% endfor %}
+        </div>
+    </details>
+{% endmacro %}
