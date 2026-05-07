@@ -1,9 +1,12 @@
-from flask import Blueprint, current_app, jsonify, render_template, request
+from pathlib import Path
+
+from flask import Blueprint, current_app, jsonify, render_template, request, send_from_directory
 
 from .fields import default_form_values, grouped_fields
 
 
 dashboard_bp = Blueprint("dashboard", __name__)
+PROJECT_ASSET_DIR = Path(__file__).resolve().parent
 
 
 def template_context(result, error, form_values):
@@ -26,6 +29,11 @@ def index():
         "index.html",
         **template_context(result, error or service.error, form_values),
     )
+
+
+@dashboard_bp.route("/project-assets/<path:filename>", methods=["GET"])
+def project_asset(filename):
+    return send_from_directory(PROJECT_ASSET_DIR, filename)
 
 
 @dashboard_bp.route("/predict", methods=["POST"])
