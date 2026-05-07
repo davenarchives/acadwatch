@@ -51,11 +51,14 @@ dropoutprediction/
 {
     "scaler": fitted_scaler,
     "model": fitted_model,
+    # optional metadata such as "model_name" is allowed
 }
 ```
 
 The `/predict` route converts form values into a NumPy array, runs
-`scaler.transform(...)`, then calls `model.predict(...)`.
+`scaler.transform(...)`, then calls `model.predict(...)`. The 29 submitted
+feature names and order are driven by `dropout_app/fields.py` and must match
+the CSV feature columns before `Target`.
 
 The dashboard also uses `/api/predict` for real-time risk updates as educators
 adjust the form controls.

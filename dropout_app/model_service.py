@@ -1,4 +1,5 @@
 import pickle
+import warnings
 
 import numpy as np
 
@@ -27,8 +28,18 @@ class PredictionService:
         if not isinstance(bundle, dict):
             raise ValueError("dropout_model.pkl must contain a dictionary.")
 
-        if set(bundle.keys()) != {"scaler", "model"}:
-            raise ValueError("dropout_model.pkl must contain only scaler and model.")
+        required_keys = {"scaler", "model"}
+        missing_keys = required_keys - set(bundle)
+        if missing_keys:
+            missing = ", ".join(sorted(missing_keys))
+            raise ValueError(f"dropout_model.pkl is missing required keys: {missing}.")
+
+        expected_features = [field["name"] for field in FEATURE_FIELDS]
+        scaler_features = list(getattr(bundle["scaler"], "feature_names_in_", []))
+        if scaler_features and scaler_features != expected_features:
+            raise ValueError(
+                "Predictor feature order does not match the fitted scaler."
+            )
 
         return bundle
 
@@ -49,7 +60,13 @@ class PredictionService:
         model = self.bundle["model"]
 
         try:
-            scaled_data = scaler.transform(input_data)
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    "ignore",
+                    message="X does not have valid feature names.*",
+                    category=UserWarning,
+                )
+                scaled_data = scaler.transform(input_data)
             prediction = model.predict(scaled_data)
         except ValueError as exc:
             return None, f"Prediction failed: {exc}", form_values

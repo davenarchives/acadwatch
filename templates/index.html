@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js"></script>
     <style>
         :root {
             --bg: #0d1117;
@@ -17,14 +19,27 @@
             --border-strong: #3d444d;
             --text: #f0f6fc;
             --muted: #8b949e;
-            --teal: #1D9E75;
-            --teal-soft: rgba(29, 158, 117, 0.16);
-            --purple: #7c3aed;
-            --purple-soft: rgba(124, 58, 237, 0.16);
-            --danger: #f85149;
-            --warning: #d29922;
+            --accent: #1D9E75;
+            --accent-soft: rgba(29, 158, 117, 0.14);
+            --accent-muted: #7dd8bd;
+            --support: #d0d7de;
+            --support-soft: rgba(208, 215, 222, 0.12);
             --nav-h: 68px;
             --sidebar-w: 260px;
+        }
+
+        body.light-theme {
+            --bg: #ffffff;
+            --card: #f6f8fa;
+            --card-soft: #ffffff;
+            --border: #d0d7de;
+            --border-strong: #afb8c1;
+            --text: #24292f;
+            --muted: #57606a;
+            --accent-soft: rgba(29, 158, 117, 0.12);
+            --accent-muted: #096b4f;
+            --support: #57606a;
+            --support-soft: rgba(87, 96, 106, 0.1);
         }
 
         * {
@@ -38,10 +53,7 @@
         body {
             margin: 0;
             min-height: 100vh;
-            background:
-                radial-gradient(circle at 20% 0%, rgba(29, 158, 117, 0.14), transparent 30%),
-                radial-gradient(circle at 82% 10%, rgba(124, 58, 237, 0.14), transparent 28%),
-                var(--bg);
+            background: var(--bg);
             color: var(--text);
             font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             letter-spacing: 0;
@@ -57,6 +69,15 @@
             cursor: pointer;
         }
 
+        a {
+            color: var(--accent-muted);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
         .topbar {
             position: fixed;
             inset: 0 0 auto 0;
@@ -67,9 +88,14 @@
             justify-content: space-between;
             gap: 18px;
             padding: 0 28px;
-            background: rgba(13, 17, 23, 0.88);
+            background: var(--bg);
             border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(16px);
+        }
+
+        .top-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .brand {
@@ -82,32 +108,99 @@
         }
 
         .brand-mark {
-            display: grid;
-            width: 34px;
-            height: 34px;
-            place-items: center;
-            border: 1px solid rgba(29, 158, 117, 0.58);
-            border-radius: 8px;
-            background: linear-gradient(135deg, rgba(29, 158, 117, 0.24), rgba(124, 58, 237, 0.18));
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-muted);
         }
 
-        .top-badge,
+        .brand-icon {
+            width: 22px;
+            height: 22px;
+            stroke-width: 1.9;
+        }
+
+        .theme-toggle,
+        .repo-link,
         .pill,
         .live-pill {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            border-radius: 999px;
             white-space: nowrap;
         }
 
-        .top-badge {
-            padding: 9px 13px;
-            border: 1px solid rgba(29, 158, 117, 0.42);
-            background: var(--teal-soft);
-            color: #c6f6e6;
-            font-size: 0.84rem;
-            font-weight: 700;
+        .repo-link {
+            width: 38px;
+            height: 38px;
+            justify-content: center;
+            padding: 0;
+            border: 1px solid transparent;
+            border-radius: 999px;
+            background: transparent;
+            color: var(--muted);
+            text-decoration: none;
+        }
+
+        .repo-link:hover {
+            background: var(--card);
+            border-color: var(--border);
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .action-icon {
+            width: 24px;
+            height: 24px;
+            color: currentColor;
+        }
+
+        ion-icon.action-icon,
+        ion-icon.theme-icon {
+            display: block;
+        }
+
+        .theme-toggle {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: 1px solid transparent;
+            border-radius: 999px;
+            background: transparent;
+            color: var(--muted);
+        }
+
+        .theme-toggle:hover {
+            background: var(--card);
+            border-color: var(--border);
+            color: var(--text);
+        }
+
+        .theme-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-icon {
+            width: 17px;
+            height: 17px;
+            flex: 0 0 auto;
+            stroke-width: 2.2;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
         .layout {
@@ -126,7 +219,7 @@
             width: var(--sidebar-w);
             overflow-y: auto;
             border-right: 1px solid var(--border);
-            background: rgba(13, 17, 23, 0.92);
+            background: var(--card);
             padding: 22px 14px;
         }
 
@@ -158,23 +251,22 @@
             border: 1px solid transparent;
             border-radius: 8px;
             background: transparent;
-            color: #c9d1d9;
+            color: var(--text);
             text-align: left;
-            transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+            transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
         }
 
         .nav-item:hover {
-            transform: translateX(2px);
-            background: rgba(22, 27, 34, 0.9);
+            background: var(--card-soft);
             border-color: var(--border);
             color: var(--text);
         }
 
         .nav-item.active {
-            background: linear-gradient(135deg, rgba(29, 158, 117, 0.2), rgba(124, 58, 237, 0.13));
-            border-color: rgba(29, 158, 117, 0.56);
+            background: var(--accent-soft);
+            border-color: rgba(29, 158, 117, 0.5);
             color: var(--text);
-            box-shadow: inset 3px 0 0 var(--teal);
+            box-shadow: inset 3px 0 0 var(--accent);
         }
 
         .nav-name {
@@ -193,19 +285,18 @@
             height: 18px;
             color: var(--muted);
             stroke-width: 2.1;
-            transition: color 180ms ease, transform 180ms ease;
+            transition: color 160ms ease;
         }
 
         .nav-item:hover .nav-icon,
         .nav-item.active .nav-icon {
-            color: #7ee6c3;
-            transform: scale(1.04);
+            color: var(--accent-muted);
         }
 
         .live-pill {
             padding: 3px 7px;
-            background: rgba(29, 158, 117, 0.18);
-            color: #7ee6c3;
+            background: var(--accent-soft);
+            color: var(--accent-muted);
             font-size: 0.65rem;
             font-weight: 800;
         }
@@ -218,22 +309,10 @@
 
         .content-section {
             display: none;
-            animation: fadeIn 220ms ease both;
         }
 
         .content-section.active {
             display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .section-head {
@@ -246,7 +325,7 @@
 
         .eyebrow {
             margin: 0 0 10px;
-            color: #7ee6c3;
+            color: var(--accent-muted);
             font-size: 0.75rem;
             font-weight: 800;
             letter-spacing: 0.12em;
@@ -282,7 +361,7 @@
 
         .lead {
             max-width: 840px;
-            color: #c9d1d9;
+            color: var(--muted);
             font-size: clamp(1rem, 2vw, 1.18rem);
             line-height: 1.7;
         }
@@ -300,22 +379,20 @@
         .result-panel {
             border: 1px solid var(--border);
             border-radius: 8px;
-            background: rgba(22, 27, 34, 0.92);
-            box-shadow: 0 20px 60px rgba(1, 4, 9, 0.22);
+            background: var(--card-soft);
+            box-shadow: 0 8px 20px rgba(1, 4, 9, 0.12);
         }
 
         .hero-panel {
             padding: clamp(24px, 5vw, 54px);
-            background:
-                linear-gradient(135deg, rgba(29, 158, 117, 0.16), rgba(124, 58, 237, 0.12)),
-                rgba(22, 27, 34, 0.92);
+            background: var(--card-soft);
         }
 
         .pill {
             padding: 7px 10px;
             border: 1px solid var(--border-strong);
-            background: rgba(13, 17, 23, 0.55);
-            color: #c9d1d9;
+            background: var(--card);
+            color: var(--text);
             font-size: 0.78rem;
             font-weight: 800;
         }
@@ -355,40 +432,49 @@
             gap: 18px;
             margin-top: 18px;
             padding: 18px;
-            background: linear-gradient(135deg, rgba(29, 158, 117, 0.2), rgba(124, 58, 237, 0.16));
+            background: var(--card-soft);
         }
 
         .primary-btn,
         .ghost-btn {
             min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             border-radius: 8px;
             border: 1px solid transparent;
             padding: 0 16px;
             color: #ffffff;
             font-weight: 800;
-            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+            white-space: nowrap;
+            transition: background 160ms ease, border-color 160ms ease;
         }
 
         .primary-btn {
-            background: linear-gradient(135deg, var(--teal), var(--purple));
-            box-shadow: 0 14px 32px rgba(29, 158, 117, 0.25);
+            background: var(--accent);
+            box-shadow: none;
         }
 
         .ghost-btn {
-            background: rgba(13, 17, 23, 0.62);
+            background: var(--card);
             border-color: var(--border-strong);
+            color: var(--text);
         }
 
         .primary-btn:hover,
         .ghost-btn:hover {
-            transform: translateY(-1px);
-            border-color: rgba(126, 230, 195, 0.55);
+            border-color: rgba(29, 158, 117, 0.5);
         }
 
         .grid-two {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 18px;
+        }
+
+        .span-two {
+            grid-column: 1 / -1;
         }
 
         .chart-card {
@@ -400,6 +486,26 @@
             position: relative;
             width: 100%;
             height: 320px;
+        }
+
+        .asset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .asset-image {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #ffffff;
+        }
+
+        .asset-image.compact {
+            max-height: 430px;
+            object-fit: contain;
         }
 
         .short-chart {
@@ -421,8 +527,8 @@
         }
 
         th {
-            color: #c9d1d9;
-            background: rgba(13, 17, 23, 0.42);
+            color: var(--muted);
+            background: var(--card);
             font-size: 0.77rem;
             letter-spacing: 0.06em;
             text-transform: uppercase;
@@ -446,8 +552,8 @@
             gap: 6px;
             padding: 5px 8px;
             border-radius: 999px;
-            background: var(--teal-soft);
-            color: #7ee6c3;
+            background: var(--accent-soft);
+            color: var(--accent-muted);
             font-size: 0.72rem;
             font-weight: 800;
         }
@@ -469,7 +575,7 @@
             position: absolute;
             top: 50%;
             right: -14px;
-            color: var(--teal);
+            color: var(--accent);
             font-weight: 800;
         }
 
@@ -485,7 +591,7 @@
             margin-bottom: 12px;
             place-items: center;
             border-radius: 8px;
-            background: linear-gradient(135deg, rgba(29, 158, 117, 0.18), rgba(124, 58, 237, 0.16));
+            background: var(--accent-soft);
             border: 1px solid var(--border-strong);
         }
 
@@ -494,40 +600,6 @@
         .card p {
             color: var(--muted);
             line-height: 1.6;
-        }
-
-        .confusion-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .matrix-cell {
-            min-height: 118px;
-            display: grid;
-            align-content: center;
-            gap: 8px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            padding: 16px;
-            text-align: center;
-        }
-
-        .matrix-cell.good {
-            background: rgba(29, 158, 117, 0.18);
-        }
-
-        .matrix-cell.warn {
-            background: rgba(210, 153, 34, 0.16);
-        }
-
-        .matrix-cell.bad {
-            background: rgba(248, 81, 73, 0.14);
-        }
-
-        .matrix-value {
-            font-size: 2rem;
-            font-weight: 800;
         }
 
         .predictor-hero {
@@ -545,7 +617,7 @@
 
         .predictor-title em {
             display: block;
-            color: #a78bfa;
+            color: var(--accent-muted);
             font-style: italic;
         }
 
@@ -575,8 +647,8 @@
             border: 1px solid var(--border);
             border-radius: 8px;
             padding: 10px 12px;
-            background: rgba(13, 17, 23, 0.58);
-            color: #c9d1d9;
+            background: var(--card);
+            color: var(--text);
             font-size: 0.82rem;
             font-weight: 800;
             line-height: 1.2;
@@ -585,8 +657,8 @@
 
         .tab-btn.active {
             border-color: rgba(29, 158, 117, 0.62);
-            background: var(--teal-soft);
-            color: #e6fff5;
+            background: var(--accent-soft);
+            color: var(--accent-muted);
         }
 
         .accordion {
@@ -597,10 +669,17 @@
             display: block;
         }
 
+        #academic,
+        #personal,
+        #socioeconomic,
+        #enrollment {
+            display: none !important;
+        }
+
         details {
             border: 1px solid var(--border);
             border-radius: 8px;
-            background: rgba(13, 17, 23, 0.45);
+            background: var(--card);
         }
 
         details + details {
@@ -634,10 +713,18 @@
             min-width: 0;
         }
 
+        .field-help {
+            min-height: 2.8em;
+            margin: -2px 0 8px;
+            color: var(--muted);
+            font-size: 0.75rem;
+            line-height: 1.45;
+        }
+
         .field label {
             display: block;
             margin-bottom: 7px;
-            color: #c9d1d9;
+            color: var(--text);
             font-size: 0.78rem;
             font-weight: 800;
         }
@@ -648,7 +735,7 @@
             min-height: 42px;
             border: 1px solid var(--border);
             border-radius: 8px;
-            background: #0d1117;
+            background: var(--bg);
             color: var(--text);
             padding: 0 11px;
             outline: none;
@@ -656,8 +743,35 @@
 
         .field input:focus,
         .field select:focus {
-            border-color: var(--teal);
-            box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.16);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.12);
+        }
+
+        .field.is-invalid input,
+        .field.is-invalid select {
+            border-color: #f85149;
+        }
+
+        .field-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            min-height: 18px;
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .field-warning,
+        .status-error {
+            color: #ffb4ad;
+        }
+
+        .status-error {
+            margin: 14px 0 0;
+            font-size: 0.86rem;
+            font-weight: 700;
         }
 
         .snapshot-top {
@@ -684,19 +798,23 @@
             pointer-events: none;
         }
 
+        body.light-theme .risk-center {
+            color: #24292f;
+        }
+
         .prediction-label {
             display: inline-flex;
             margin-bottom: 10px;
             padding: 7px 10px;
             border-radius: 8px;
-            background: var(--teal-soft);
-            color: #7ee6c3;
+            background: var(--accent-soft);
+            color: var(--accent-muted);
             font-weight: 800;
         }
 
         .prediction-label.dropout {
-            background: rgba(248, 81, 73, 0.14);
-            color: #ffb4ad;
+            background: var(--support-soft);
+            color: var(--support);
         }
 
         .analysis-status {
@@ -705,7 +823,7 @@
         }
 
         .analysis-status.pending {
-            color: #d29922;
+            color: var(--accent-muted);
         }
 
         .risk-level {
@@ -724,7 +842,7 @@
         .snapshot-list li {
             position: relative;
             padding-left: 18px;
-            color: #c9d1d9;
+            color: var(--text);
             line-height: 1.5;
         }
 
@@ -736,7 +854,7 @@
             width: 7px;
             height: 7px;
             border-radius: 50%;
-            background: var(--teal);
+            background: var(--accent);
         }
 
         .panel-divider {
@@ -780,14 +898,14 @@
                 height: 40px;
                 border: 1px solid var(--border);
                 border-radius: 8px;
-                background: rgba(22, 27, 34, 0.95);
+                background: var(--card);
                 color: var(--text);
             }
 
             .sidebar {
                 width: 280px;
                 transform: translateX(-100%);
-                transition: transform 200ms ease;
+                transition: transform 180ms ease;
             }
 
             body.sidebar-open .sidebar {
@@ -803,6 +921,7 @@
             }
 
             .grid-two,
+            .asset-grid,
             .stats-grid,
             .metric-grid {
                 grid-template-columns: 1fr;
@@ -824,8 +943,8 @@
         }
 
         @media (max-width: 560px) {
-            .top-badge {
-                display: none;
+            .top-actions {
+                gap: 6px;
             }
 
             .snapshot-top {
@@ -849,11 +968,19 @@
 <body>
     <header class="topbar">
         <div class="brand">
-            <button class="mobile-menu" type="button" aria-label="Open navigation" data-mobile-menu>☰</button>
-            <span class="brand-mark">🎓</span>
+            <button class="mobile-menu" type="button" aria-label="Open navigation" data-mobile-menu>Menu</button>
+            <span class="brand-mark" aria-hidden="true"><svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 7.5a3 3 0 0 1 5.5-1.7A3.2 3.2 0 0 1 19 8a3.4 3.4 0 0 1-.8 6.7 3.4 3.4 0 0 1-4.8 3.3A3.4 3.4 0 0 1 8 18a3.3 3.3 0 0 1-3.7-4.7A3.5 3.5 0 0 1 8 7.5Z"/><path d="M8.5 8.2v9"/><path d="M13.5 5.8v12.4"/><path d="M8.5 12h5"/><path d="M13.5 9.5H17"/><path d="M13.5 14.5H17"/></svg></span>
             <span>AcadWatch</span>
         </div>
-        <div class="top-badge">Tuned Random Forest · F1 0.XXXX</div>
+        <div class="top-actions" aria-label="Project actions">
+            <a class="repo-link" href="https://github.com/davenarchives/ml-dropoutprediction" target="_blank" rel="noreferrer" aria-label="Open GitHub repository" title="GitHub repository">
+                <ion-icon class="action-icon" name="logo-github" aria-hidden="true"></ion-icon>
+            </a>
+            <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light or dark mode" title="Toggle light or dark mode" aria-pressed="false">
+                <ion-icon class="theme-icon" data-theme-icon name="moon-outline" aria-hidden="true"></ion-icon>
+                <span class="sr-only" data-theme-label>Dark mode</span>
+            </button>
+        </div>
     </header>
 
     <div class="layout">
@@ -886,20 +1013,20 @@
                 <div class="hero-panel">
                     <span class="pill">IT325 Machine Learning | PIT Project</span>
                     <h1>AcadWatch</h1>
-                    <p class="lead">AcadWatch is a dark-themed machine learning dashboard for exploring student dropout prediction, from dataset understanding and EDA through model comparison, tuning, evaluation, and a live risk predictor for rapid academic support review.</p>
+                    <p class="lead">AcadWatch predicts student dropout risk from academic performance, tuition status, demographics, socioeconomic indicators, and enrollment records. The project trains and evaluates multiple classifiers, then uses a tuned Random Forest model to support early intervention decisions.</p>
                     <div class="stats-grid">
                         <article class="card"><span class="stat-value">4,424</span><span class="stat-label">Rows</span></article>
-                        <article class="card"><span class="stat-value">36</span><span class="stat-label">Features</span></article>
+                        <article class="card"><span class="stat-value">29</span><span class="stat-label">Features</span></article>
                         <article class="card"><span class="stat-value">5</span><span class="stat-label">Models Tested</span></article>
-                        <article class="card"><span class="stat-value">0.XXXX</span><span class="stat-label">Best F1</span></article>
+                        <article class="card"><span class="stat-value">0.8809</span><span class="stat-label">Best F1</span></article>
                     </div>
                 </div>
                 <div class="cta-banner">
                     <div>
                         <h3>Try the Live Predictor</h3>
-                        <p class="muted">Adjust academic, personal, socioeconomic, and enrollment signals to simulate dropout risk in real time.</p>
+                        <p class="muted">Enter student academic, financial, demographic, and enrollment data to generate a dropout risk assessment based on the project model workflow.</p>
                     </div>
-                    <button class="primary-btn" type="button" data-section-target="predictor">Open Predictor</button>
+                    <button class="primary-btn" type="button" data-section-target="predictor"><ion-icon class="btn-icon" name="arrow-forward-outline" aria-hidden="true"></ion-icon>Open Predictor</button>
                 </div>
             </section>
 
@@ -908,7 +1035,7 @@
                     <div>
                         <p class="eyebrow">Dataset Info</p>
                         <h2>Student Dropout Dataset</h2>
-                        <p class="lead">Source: Kaggle. The dataset contains enrollment, demographic, socioeconomic, and academic indicators used to classify whether a student is likely to drop out or continue.</p>
+                        <p class="lead">Source: Kaggle student dropout dataset. This project uses 4,424 student records with 29 input features and one target column to classify Dropout versus Non-Dropout outcomes.</p>
                     </div>
                 </div>
                 <div class="grid-two">
@@ -919,6 +1046,16 @@
                     <article class="card">
                         <h3>Feature Families</h3>
                         <p>Inputs include academic performance, financial status, family background, course enrollment, and demographic context.</p>
+                    </article>
+                </div>
+                <div class="grid-two" style="margin-top:18px">
+                    <article class="card">
+                        <h3>Dataset File</h3>
+                        <p><a href="{{ url_for('dashboard.project_asset', filename='files/dropout_dataset.csv') }}">dropout_dataset.csv</a></p>
+                    </article>
+                    <article class="card">
+                        <h3>Notebook</h3>
+                        <p><a href="{{ url_for('dashboard.project_asset', filename='files/StudentDropoutRisk.ipynb') }}">StudentDropoutRisk.ipynb</a></p>
                     </article>
                 </div>
                 <div class="table-wrap" style="margin-top:18px">
@@ -938,11 +1075,11 @@
                     <table>
                         <thead><tr><th>Course</th><th>Age</th><th>Tuition Up To Date</th><th>2nd Sem Approved</th><th>2nd Sem Grade</th><th>Target</th></tr></thead>
                         <tbody>
-                            <tr><td>Informatics Engineering</td><td>20</td><td>Yes</td><td>6</td><td>13.2</td><td>Non-Dropout</td></tr>
-                            <tr><td>Management</td><td>24</td><td>No</td><td>1</td><td>7.8</td><td>Dropout</td></tr>
-                            <tr><td>Nursing</td><td>19</td><td>Yes</td><td>7</td><td>14.5</td><td>Non-Dropout</td></tr>
-                            <tr><td>Tourism</td><td>29</td><td>No</td><td>2</td><td>9.1</td><td>Dropout</td></tr>
-                            <tr><td>Basic Education</td><td>21</td><td>Yes</td><td>5</td><td>12.4</td><td>Non-Dropout</td></tr>
+                            <tr><td>171</td><td>20</td><td>Yes</td><td>0</td><td>0.00</td><td>Dropout</td></tr>
+                            <tr><td>9254</td><td>19</td><td>No</td><td>6</td><td>13.67</td><td>Non-Dropout</td></tr>
+                            <tr><td>9070</td><td>19</td><td>No</td><td>0</td><td>0.00</td><td>Dropout</td></tr>
+                            <tr><td>9773</td><td>20</td><td>Yes</td><td>5</td><td>12.40</td><td>Non-Dropout</td></tr>
+                            <tr><td>8014</td><td>45</td><td>Yes</td><td>6</td><td>13.00</td><td>Non-Dropout</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -956,16 +1093,28 @@
                         <p class="lead">The class mix and feature rankings help explain why financial status and academic progress deserve prominent treatment in the risk demo.</p>
                     </div>
                 </div>
-                <div class="grid-two">
+                <div class="asset-grid">
                     <article class="chart-card">
-                        <h3>Class Distribution</h3>
-                        <div class="chart-frame"><canvas id="classChart"></canvas></div>
-                        <p>Non-dropout records form the majority class, so stratified splitting and balanced training are important for reliable recall.</p>
+                        <h3>Target Variable Distribution</h3>
+                        <img class="asset-image compact" src="{{ url_for('dashboard.project_asset', filename='eda/targetvariabledistribution.png') }}" alt="Target variable distribution chart">
+                        <p>The dataset is imbalanced: 3,003 Non-Dropout records and 1,421 Dropout records.</p>
                     </article>
                     <article class="chart-card">
-                        <h3>Top 10 Feature Importances</h3>
-                        <div class="chart-frame"><canvas id="importanceChart"></canvas></div>
-                        <p>Semester approvals, tuition status, grades, and debtor status show the strongest relationship with dropout risk.</p>
+                        <h3>Top 10 Features</h3>
+                        <img class="asset-image compact" src="{{ url_for('dashboard.project_asset', filename='eda/top10features.png') }}" alt="Top 10 feature importance chart">
+                        <p>Academic progress, tuition status, and financial signals are the most useful model inputs.</p>
+                    </article>
+                    <article class="chart-card">
+                        <h3>Distribution by Target</h3>
+                        <img class="asset-image compact" src="{{ url_for('dashboard.project_asset', filename='eda/distributionbytarget.png') }}" alt="Distribution by target EDA chart">
+                    </article>
+                    <article class="chart-card">
+                        <h3>Financial Factors by Target</h3>
+                        <img class="asset-image compact" src="{{ url_for('dashboard.project_asset', filename='eda/financialfactorsbytarget.png') }}" alt="Financial factors by target chart">
+                    </article>
+                    <article class="chart-card">
+                        <h3>Demographic Factors</h3>
+                        <img class="asset-image compact" src="{{ url_for('dashboard.project_asset', filename='eda/demographicfactors.png') }}" alt="Demographic factors chart">
                     </article>
                 </div>
             </section>
@@ -986,7 +1135,7 @@
                     <article class="card step-card"><span class="step-icon">05</span><h3>SMOTE</h3><p>Balance only the training partition.</p></article>
                     <article class="card step-card"><span class="step-icon">06</span><h3>5-Fold CV</h3><p>Run stratified cross-validation for stable scores.</p></article>
                     <article class="card step-card"><span class="step-icon">07</span><h3>Model Comparison</h3><p>Compare five candidate classifiers.</p></article>
-                    <article class="card step-card"><span class="step-icon">08</span><h3>Hypertuning</h3><p>Search Random Forest hyperparameters.</p></article>
+                    <article class="card step-card"><span class="step-icon">08</span><h3>Hypertuning</h3><p>Search Random Forest and KNN hyperparameters.</p></article>
                     <article class="card step-card"><span class="step-icon">09</span><h3>Evaluation</h3><p>Measure final test performance and ROC-AUC.</p></article>
                     <article class="card step-card"><span class="step-icon">10</span><h3>Save PKL</h3><p>Persist scaler and model for app use.</p></article>
                 </div>
@@ -997,23 +1146,23 @@
                     <div>
                         <p class="eyebrow">Model Comparison</p>
                         <h2>Five Candidate Models</h2>
-                        <p class="lead">Random Forest is highlighted as the strongest model because it gives the best F1 balance across precision and recall.</p>
+                        <p class="lead">Random Forest ranked first during SMOTE plus 5-fold stratified cross-validation with the highest weighted F1 score.</p>
                     </div>
                     <span class="badge-best">Random Forest Best</span>
                 </div>
                 <article class="chart-card">
-                    <div class="chart-frame"><canvas id="comparisonChart"></canvas></div>
+                    <img class="asset-image" src="{{ url_for('dashboard.project_asset', filename='comparison-and-eval/modelcomparison.png') }}" alt="Model comparison chart from the notebook">
                 </article>
                 <div class="table-wrap" style="margin-top:18px">
                     <div class="table-title"><h3>Summary Table</h3></div>
                     <table>
                         <thead><tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>Status</th></tr></thead>
                         <tbody>
-                            <tr><td>Logistic Regression</td><td>0.82</td><td>0.76</td><td>0.71</td><td>0.73</td><td>Baseline</td></tr>
-                            <tr><td>KNN</td><td>0.79</td><td>0.70</td><td>0.68</td><td>0.69</td><td>Distance-based</td></tr>
-                            <tr><td>Decision Tree</td><td>0.81</td><td>0.73</td><td>0.74</td><td>0.74</td><td>Interpretable</td></tr>
-                            <tr><td>Random Forest</td><td>0.88</td><td>0.84</td><td>0.82</td><td>0.83</td><td><span class="badge-best">Best</span></td></tr>
-                            <tr><td>Naive Bayes</td><td>0.75</td><td>0.66</td><td>0.62</td><td>0.64</td><td>Probabilistic</td></tr>
+                            <tr><td>Random Forest</td><td>0.9045</td><td>0.9053</td><td>0.9045</td><td>0.9044</td><td><span class="badge-best">Best CV F1</span></td></tr>
+                            <tr><td>KNN</td><td>0.8528</td><td>0.8547</td><td>0.8528</td><td>0.8526</td><td>Top 2</td></tr>
+                            <tr><td>Logistic Regression</td><td>0.8503</td><td>0.8531</td><td>0.8503</td><td>0.8500</td><td>Baseline</td></tr>
+                            <tr><td>Decision Tree</td><td>0.8389</td><td>0.8390</td><td>0.8389</td><td>0.8389</td><td>Tree baseline</td></tr>
+                            <tr><td>Naive Bayes</td><td>0.7975</td><td>0.8061</td><td>0.7975</td><td>0.7960</td><td>Probabilistic</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1024,31 +1173,44 @@
                     <div>
                         <p class="eyebrow">Hypertuning</p>
                         <h2>RandomizedSearchCV</h2>
-                        <p class="lead">The best model was tuned with randomized search over estimator count, depth, split criteria, and feature sampling strategy.</p>
+                        <p class="lead">The notebook hypertunes the top two cross-validation models: Random Forest and KNN. RandomizedSearchCV runs 20 candidates with 5-fold stratified CV, scored by weighted recall.</p>
                     </div>
                 </div>
                 <div class="grid-two">
                     <div class="table-wrap">
-                        <div class="table-title"><h3>Best Parameters Found</h3></div>
+                        <div class="table-title"><h3>Random Forest Best Parameters</h3></div>
                         <table>
                             <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
                             <tbody>
-                                <tr><td>n_estimators</td><td>300</td></tr>
-                                <tr><td>max_depth</td><td>18</td></tr>
-                                <tr><td>min_samples_split</td><td>4</td></tr>
-                                <tr><td>min_samples_leaf</td><td>2</td></tr>
-                                <tr><td>max_features</td><td>sqrt</td></tr>
-                                <tr><td>class_weight</td><td>balanced</td></tr>
+                                <tr><td>n_estimators</td><td>200</td></tr>
+                                <tr><td>max_depth</td><td>30</td></tr>
+                                <tr><td>min_samples_split</td><td>2</td></tr>
+                                <tr><td>min_samples_leaf</td><td>1</td></tr>
+                                <tr><td>max_features</td><td>log2</td></tr>
+                                <tr><td>Best CV Recall</td><td>0.9057</td></tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="table-wrap">
+                        <div class="table-title"><h3>KNN Best Parameters</h3></div>
+                        <table>
+                            <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+                            <tbody>
+                                <tr><td>n_neighbors</td><td>3</td></tr>
+                                <tr><td>weights</td><td>distance</td></tr>
+                                <tr><td>metric</td><td>minkowski</td></tr>
+                                <tr><td>p</td><td>1</td></tr>
+                                <tr><td>Best CV Recall</td><td>0.8990</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-wrap span-two">
                         <div class="table-title"><h3>Before vs After</h3></div>
                         <table>
-                            <thead><tr><th>Stage</th><th>CV F1</th><th>Final F1</th></tr></thead>
+                            <thead><tr><th>Model</th><th>Before CV F1</th><th>After Test F1</th><th>Before CV Recall</th><th>After Test Recall</th></tr></thead>
                             <tbody>
-                                <tr><td>Before tuning</td><td>0.79</td><td>0.80</td></tr>
-                                <tr><td>After tuning</td><td>0.83</td><td>0.XXXX</td></tr>
+                                <tr><td>Random Forest</td><td>0.9044</td><td>0.8809</td><td>0.9045</td><td>0.8825</td></tr>
+                                <tr><td>KNN</td><td>0.8526</td><td>0.8243</td><td>0.8528</td><td>0.8249</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -1064,24 +1226,19 @@
                     </div>
                 </div>
                 <div class="metric-grid">
-                    <article class="card"><span class="stat-value">0.88</span><span class="stat-label">Accuracy</span></article>
-                    <article class="card"><span class="stat-value">0.84</span><span class="stat-label">Precision</span></article>
-                    <article class="card"><span class="stat-value">0.82</span><span class="stat-label">Recall</span></article>
-                    <article class="card"><span class="stat-value">0.XXXX</span><span class="stat-label">F1</span></article>
+                    <article class="card"><span class="stat-value">0.8825</span><span class="stat-label">Accuracy</span></article>
+                    <article class="card"><span class="stat-value">0.8811</span><span class="stat-label">Precision</span></article>
+                    <article class="card"><span class="stat-value">0.8825</span><span class="stat-label">Recall</span></article>
+                    <article class="card"><span class="stat-value">0.8809</span><span class="stat-label">F1</span></article>
                 </div>
                 <div class="grid-two" style="margin-top:18px">
                     <article class="chart-card">
                         <h3>Confusion Matrix</h3>
-                        <div class="confusion-grid">
-                            <div class="matrix-cell good"><span class="matrix-value">540</span><span>TN</span></div>
-                            <div class="matrix-cell warn"><span class="matrix-value">48</span><span>FP</span></div>
-                            <div class="matrix-cell bad"><span class="matrix-value">42</span><span>FN</span></div>
-                            <div class="matrix-cell good"><span class="matrix-value">255</span><span>TP</span></div>
-                        </div>
+                        <img class="asset-image compact" src="{{ url_for('dashboard.project_asset', filename='comparison-and-eval/confusionmatrix.png') }}" alt="Random Forest confusion matrix">
                     </article>
                     <article class="chart-card">
                         <h3>ROC Curve</h3>
-                        <div class="chart-frame short-chart"><canvas id="rocChart"></canvas></div>
+                        <img class="asset-image compact" src="{{ url_for('dashboard.project_asset', filename='comparison-and-eval/roccurve.png') }}" alt="Random Forest ROC curve">
                     </article>
                 </div>
                 <div class="table-wrap" style="margin-top:18px">
@@ -1089,9 +1246,9 @@
                     <table>
                         <thead><tr><th>Class</th><th>Precision</th><th>Recall</th><th>F1</th><th>Support</th></tr></thead>
                         <tbody>
-                            <tr><td>Non-Dropout</td><td>0.93</td><td>0.92</td><td>0.92</td><td>588</td></tr>
-                            <tr><td>Dropout</td><td>0.84</td><td>0.86</td><td>0.XXXX</td><td>297</td></tr>
-                            <tr><td>Weighted Avg</td><td>0.88</td><td>0.88</td><td>0.XXXX</td><td>885</td></tr>
+                            <tr><td>Non-Dropout</td><td>0.90</td><td>0.94</td><td>0.92</td><td>601</td></tr>
+                            <tr><td>Dropout</td><td>0.85</td><td>0.77</td><td>0.81</td><td>284</td></tr>
+                            <tr><td>Weighted Avg</td><td>0.88</td><td>0.88</td><td>0.88</td><td>885</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1099,19 +1256,75 @@
 
             <section id="predictor" class="content-section">
                 <div class="predictor-hero">
-                    <span class="pill">+ IT325 Machine Learning</span>
                     <h2 class="predictor-title">Student Dropout <em>Risk Predictor</em></h2>
-                    <p class="lead">A simulated Random Forest-style risk snapshot based on weighted academic progress, tuition status, debtor state, and contextual enrollment factors.</p>
+                    <p class="lead">Enter the 29 dataset features described in the project schema to generate a dropout risk assessment informed by the tuned Random Forest classifier trained on 4,424 student records.</p>
                 </div>
                 <div class="predictor-grid">
-                    <form class="predictor-shell" id="predictorForm">
+                    <form class="predictor-shell" id="predictorForm" data-api-url="{{ url_for('dashboard.predict_api') }}">
                         <div class="tabs" role="tablist" aria-label="Predictor input categories">
-                            <button class="tab-btn active" type="button" data-tab-target="academic">Academic Performance</button>
-                            <button class="tab-btn" type="button" data-tab-target="personal">Personal Information</button>
-                            <button class="tab-btn" type="button" data-tab-target="socioeconomic">Socioeconomic Factors</button>
-                            <button class="tab-btn" type="button" data-tab-target="enrollment">Enrollment Details</button>
+                            {% for section in sections %}
+                                {% set tab_id = section.title|lower|replace(' ', '-') %}
+                                <button class="tab-btn {% if loop.first %}active{% endif %}" type="button" data-tab-target="{{ tab_id }}">
+                                    {{ section.title }}
+                                </button>
+                            {% endfor %}
                         </div>
 
+                        {% for section in sections %}
+                            {% set tab_id = section.title|lower|replace(' ', '-') %}
+                            <div class="accordion {% if loop.first %}active{% endif %}" id="{{ tab_id }}">
+                                <details open>
+                                    <summary>{{ section.title }} <ion-icon name="chevron-down-outline" aria-hidden="true"></ion-icon></summary>
+                                    <div class="fields-grid">
+                                        {% for field in section.fields %}
+                                            {% set field_id = "feature_" ~ loop.index ~ "_" ~ tab_id %}
+                                            {% set current_value = form_values.get(field.name, field.default|string) %}
+                                            <div class="field" data-field-card>
+                                                <label for="{{ field_id }}">{{ field.label }}</label>
+                                                {% if field.help %}
+                                                    <p class="field-help">{{ field.help }}</p>
+                                                {% endif %}
+
+                                                {% if field.options %}
+                                                    <select id="{{ field_id }}" name="{{ field.name }}" required>
+                                                        {% for value, option_label in field.options %}
+                                                            <option value="{{ value }}" {% if current_value == value %}selected{% endif %}>
+                                                                {{ option_label }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                {% else %}
+                                                    <input
+                                                        id="{{ field_id }}"
+                                                        name="{{ field.name }}"
+                                                        type="number"
+                                                        step="{{ field.step|default('any') }}"
+                                                        {% if field.min is defined %}min="{{ field.min }}"{% endif %}
+                                                        {% if field.max is defined %}max="{{ field.max }}"{% endif %}
+                                                        value="{{ current_value }}"
+                                                        placeholder="{{ field.placeholder|default('Enter value') }}"
+                                                        required
+                                                    >
+                                                {% endif %}
+
+                                                <div class="field-meta">
+                                                    <span class="field-warning"></span>
+                                                    {% if field.unit %}
+                                                        <span>{{ field.unit }}</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </details>
+                            </div>
+                        {% endfor %}
+
+                        {% if error %}
+                            <p class="status-error">{{ error }}</p>
+                        {% endif %}
+
+                        <fieldset class="legacy-predictor-fields" disabled hidden>
                         <div class="accordion active" id="academic">
                             <details open>
                                 <summary>Academic Performance <span>⌄</span></summary>
@@ -1165,6 +1378,7 @@
                                 </div>
                             </details>
                         </div>
+                        </fieldset>
                     </form>
 
                     <aside class="result-panel" aria-label="Risk Snapshot">
@@ -1172,19 +1386,40 @@
                         <div class="snapshot-top">
                             <div class="risk-chart">
                                 <canvas id="riskChart"></canvas>
-                                <div class="risk-center"><span id="riskPercent">32%</span></div>
+                                <div class="risk-center"><span id="riskPercent">{{ result.confidence if result else 0 }}%</span></div>
                             </div>
                             <div>
-                                <span id="predictionLabel" class="prediction-label">Non-Dropout</span>
-                                <div id="riskLevel" class="risk-level">Medium Risk</div>
-                                <p class="muted analysis-status" id="analysisStatus">Ready to analyze the current inputs.</p>
+                                {% set initial_dropout = result and result.label == 'Likely to Dropout' %}
+                                <span id="predictionLabel" class="prediction-label {% if initial_dropout %}dropout{% endif %}">
+                                    {% if initial_dropout %}Dropout{% else %}Non-Dropout{% endif %}
+                                </span>
+                                <div id="riskLevel" class="risk-level">{{ result.risk_level if result else 'Low' }} Risk</div>
+                                <p class="muted analysis-status" id="analysisStatus">
+                                    {% if result %}
+                                        Ready with the current model prediction.
+                                    {% else %}
+                                        Complete all required inputs to analyze risk.
+                                    {% endif %}
+                                </p>
                             </div>
                         </div>
                         <div class="panel-divider"></div>
                         <h3>Key Contributing Factors</h3>
-                        <ul class="snapshot-list" id="factorList"></ul>
+                        <ul class="snapshot-list" id="factorList">
+                            {% if result %}
+                                {% for factor in result.factors %}
+                                    <li>{{ factor }}</li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
                         <h3>Suggested Actions</h3>
-                        <ul class="snapshot-list" id="actionList"></ul>
+                        <ul class="snapshot-list" id="actionList">
+                            {% if result %}
+                                {% for action in result.actions %}
+                                    <li>{{ action }}</li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
                         <button class="primary-btn" type="button" id="analyzeBtn" style="width:100%">Analyze Risk</button>
                     </aside>
                 </div>
@@ -1195,11 +1430,41 @@
     <script>
         const chartTextColor = '#c9d1d9';
         const gridColor = 'rgba(48, 54, 61, 0.82)';
-        const teal = '#1D9E75';
-        const purple = '#7c3aed';
-        const danger = '#f85149';
-        const warning = '#d29922';
+        const accent = '#1D9E75';
+        const neutralStrong = '#d0d7de';
+        const neutralSoft = 'rgba(139, 148, 158, 0.34)';
         const charts = {};
+        const initialResult = {{ result|tojson }};
+        let lastRisk = Number(initialResult?.confidence || 0);
+
+        function applyTheme(theme) {
+            const isLight = theme === 'light';
+            document.body.classList.toggle('light-theme', isLight);
+            document.querySelector('[data-theme-label]').textContent = isLight ? 'Light mode' : 'Dark mode';
+            document.querySelector('[data-theme-toggle]').setAttribute('aria-pressed', String(isLight));
+            document.querySelector('[data-theme-icon]').setAttribute('name', isLight ? 'sunny-outline' : 'moon-outline');
+            updateRiskChartColors();
+        }
+
+        function riskChartPalette(risk) {
+            const isLight = document.body.classList.contains('light-theme');
+            return {
+                risk: risk >= 50 ? (isLight ? '#57606a' : neutralStrong) : accent,
+                remaining: isLight ? '#d8dee4' : 'rgba(48, 54, 61, 0.72)',
+                border: isLight ? '#ffffff' : '#161b22',
+            };
+        }
+
+        function updateRiskChartColors() {
+            if (!charts.riskChart) return;
+            const palette = riskChartPalette(lastRisk);
+            charts.riskChart.data.datasets[0].backgroundColor = [palette.risk, palette.remaining];
+            charts.riskChart.data.datasets[0].borderColor = palette.border;
+            charts.riskChart.update();
+        }
+
+        const savedTheme = localStorage.getItem('acadwatch-theme') || 'dark';
+        applyTheme(savedTheme);
 
         Chart.defaults.color = chartTextColor;
         Chart.defaults.font.family = 'Inter, sans-serif';
@@ -1243,134 +1508,21 @@
         }
 
         function initializeVisibleCharts(sectionId) {
-            if (sectionId === 'eda') {
-                initClassChart();
-                initImportanceChart();
-            }
-            if (sectionId === 'comparison') initComparisonChart();
-            if (sectionId === 'evaluation') initRocChart();
             if (sectionId === 'predictor') initRiskChart();
-        }
-
-        function initClassChart() {
-            if (charts.classChart) return;
-            charts.classChart = new Chart(document.getElementById('classChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['Non-Dropout', 'Dropout'],
-                    datasets: [{
-                        data: [68, 32],
-                        backgroundColor: [teal, danger],
-                        borderColor: '#161b22',
-                        borderWidth: 4
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    cutout: '68%',
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
-                }
-            });
-        }
-
-        function initImportanceChart() {
-            if (charts.importanceChart) return;
-            charts.importanceChart = new Chart(document.getElementById('importanceChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['2nd sem approved', '2nd sem grade', 'Tuition up to date', '1st sem approved', 'Debtor', 'Admission grade', 'Age', 'Scholarship', 'Course', 'Evaluations'],
-                    datasets: [{
-                        label: 'Importance',
-                        data: [0.18, 0.14, 0.13, 0.11, 0.09, 0.08, 0.07, 0.06, 0.05, 0.04],
-                        backgroundColor: 'rgba(29, 158, 117, 0.72)',
-                        borderColor: teal,
-                        borderWidth: 1,
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { beginAtZero: true, grid: { color: gridColor } },
-                        y: { grid: { display: false } }
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        }
-
-        function initComparisonChart() {
-            if (charts.comparisonChart) return;
-            const labels = ['Logistic Regression', 'KNN', 'Decision Tree', 'Random Forest', 'Naive Bayes'];
-            charts.comparisonChart = new Chart(document.getElementById('comparisonChart'), {
-                type: 'bar',
-                data: {
-                    labels,
-                    datasets: [
-                        { label: 'Accuracy', data: [0.82, 0.79, 0.81, 0.88, 0.75], backgroundColor: 'rgba(29, 158, 117, 0.72)', borderRadius: 6 },
-                        { label: 'Precision', data: [0.76, 0.70, 0.73, 0.84, 0.66], backgroundColor: 'rgba(124, 58, 237, 0.72)', borderRadius: 6 },
-                        { label: 'Recall', data: [0.71, 0.68, 0.74, 0.82, 0.62], backgroundColor: 'rgba(210, 153, 34, 0.72)', borderRadius: 6 },
-                        { label: 'F1', data: [0.73, 0.69, 0.74, 0.83, 0.64], backgroundColor: 'rgba(88, 166, 255, 0.72)', borderRadius: 6 }
-                    ]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { grid: { display: false } },
-                        y: { beginAtZero: true, max: 1, grid: { color: gridColor } }
-                    }
-                }
-            });
-        }
-
-        function initRocChart() {
-            if (charts.rocChart) return;
-            charts.rocChart = new Chart(document.getElementById('rocChart'), {
-                type: 'line',
-                data: {
-                    labels: [0, 0.05, 0.12, 0.22, 0.36, 0.55, 0.78, 1],
-                    datasets: [
-                        {
-                            label: 'Random Forest ROC',
-                            data: [0, 0.28, 0.48, 0.66, 0.78, 0.88, 0.95, 1],
-                            borderColor: teal,
-                            backgroundColor: 'rgba(29, 158, 117, 0.12)',
-                            fill: true,
-                            tension: 0.35
-                        },
-                        {
-                            label: 'Baseline',
-                            data: [0, 0.05, 0.12, 0.22, 0.36, 0.55, 0.78, 1],
-                            borderColor: 'rgba(139, 148, 158, 0.8)',
-                            borderDash: [5, 5],
-                            pointRadius: 0
-                        }
-                    ]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { title: { display: true, text: 'False Positive Rate' }, grid: { color: gridColor } },
-                        y: { title: { display: true, text: 'True Positive Rate' }, beginAtZero: true, max: 1, grid: { color: gridColor } }
-                    }
-                }
-            });
         }
 
         function initRiskChart() {
             if (charts.riskChart) return;
+            const startingRisk = Math.max(0, Math.min(100, Number(initialResult?.confidence || 0)));
             charts.riskChart = new Chart(document.getElementById('riskChart'), {
                 type: 'doughnut',
                 data: {
                     labels: ['Risk', 'Remaining'],
                     datasets: [{
-                        data: [32, 68],
-                        backgroundColor: [warning, 'rgba(48, 54, 61, 0.72)'],
+                        data: [startingRisk, 100 - startingRisk],
+                        backgroundColor: [accent, 'rgba(48, 54, 61, 0.72)'],
                         borderColor: '#161b22',
-                        borderWidth: 5
+                        borderWidth: 4
                     }]
                 },
                 options: {
@@ -1380,7 +1532,59 @@
                     plugins: { legend: { display: false }, tooltip: { enabled: false } }
                 }
             });
-            calculateRisk();
+            if (initialResult) {
+                renderModelResult(initialResult, 'Ready with the current model prediction.');
+            }
+        }
+
+        function renderList(id, items) {
+            const list = document.getElementById(id);
+            list.innerHTML = '';
+            items.forEach((item) => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                list.appendChild(li);
+            });
+        }
+
+        function renderModelResult(result, statusText) {
+            const risk = Math.max(0, Math.min(100, Number(result.confidence || 0)));
+            const label = result.label === 'Likely to Dropout' ? 'Dropout' : 'Non-Dropout';
+            lastRisk = risk;
+
+            if (charts.riskChart) {
+                const palette = riskChartPalette(risk);
+                charts.riskChart.data.datasets[0].data = [risk, 100 - risk];
+                charts.riskChart.data.datasets[0].backgroundColor = [palette.risk, palette.remaining];
+                charts.riskChart.data.datasets[0].borderColor = palette.border;
+                charts.riskChart.update();
+            }
+
+            document.getElementById('riskPercent').textContent = `${risk.toFixed(1).replace('.0', '')}%`;
+            document.getElementById('riskLevel').textContent = `${result.risk_level} Risk`;
+            const status = document.getElementById('analysisStatus');
+            status.textContent = statusText || `Analyzed current inputs with the trained model. Dropout probability is ${risk.toFixed(1).replace('.0', '')}%.`;
+            status.classList.remove('pending');
+
+            const predictionLabel = document.getElementById('predictionLabel');
+            predictionLabel.textContent = label;
+            predictionLabel.classList.toggle('dropout', label === 'Dropout');
+            renderList('factorList', result.factors || []);
+            renderList('actionList', result.actions || []);
+        }
+
+        async function requestPrediction() {
+            const form = document.getElementById('predictorForm');
+            const response = await fetch(form.dataset.apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(Object.fromEntries(new FormData(form).entries()))
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || 'Prediction failed');
+            }
+            return data;
         }
 
         function markRiskPending() {
@@ -1391,15 +1595,21 @@
             button.textContent = 'Analyze Updated Inputs';
         }
 
-        function analyzeRisk() {
+        async function analyzeRisk() {
             const button = document.getElementById('analyzeBtn');
             button.textContent = 'Analyzing...';
             button.disabled = true;
-            setTimeout(() => {
-                calculateRisk();
+            try {
+                const result = await requestPrediction();
+                renderModelResult(result);
+            } catch (error) {
+                const status = document.getElementById('analysisStatus');
+                status.textContent = error.message;
+                status.classList.add('pending');
+            } finally {
                 button.disabled = false;
                 button.textContent = 'Analyze Risk';
-            }, 220);
+            }
         }
 
         function calculateRisk() {
@@ -1439,13 +1649,15 @@
             risk += application === 'over23' || application === 'transfer' ? 4 : 0;
             risk += parentQual === 'basic' ? 4 : 0;
             risk = Math.round(clamp(risk, 4, 96));
+            lastRisk = risk;
 
-            const color = risk >= 65 ? danger : risk >= 38 ? warning : teal;
+            const palette = riskChartPalette(risk);
             const label = risk >= 50 ? 'Dropout' : 'Non-Dropout';
             const level = risk >= 65 ? 'High Risk' : risk >= 38 ? 'Medium Risk' : 'Low Risk';
 
             charts.riskChart.data.datasets[0].data = [risk, 100 - risk];
-            charts.riskChart.data.datasets[0].backgroundColor = [color, 'rgba(48, 54, 61, 0.72)'];
+            charts.riskChart.data.datasets[0].backgroundColor = [palette.risk, palette.remaining];
+            charts.riskChart.data.datasets[0].borderColor = palette.border;
             charts.riskChart.update();
 
             document.getElementById('riskPercent').textContent = `${risk}%`;
@@ -1496,6 +1708,12 @@
 
         document.querySelector('[data-mobile-menu]').addEventListener('click', () => {
             document.body.classList.toggle('sidebar-open');
+        });
+
+        document.querySelector('[data-theme-toggle]').addEventListener('click', () => {
+            const nextTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
+            localStorage.setItem('acadwatch-theme', nextTheme);
+            applyTheme(nextTheme);
         });
 
         document.getElementById('predictorForm').addEventListener('input', markRiskPending);
